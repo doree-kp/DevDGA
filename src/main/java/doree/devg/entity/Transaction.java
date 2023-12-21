@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -13,5 +15,12 @@ import lombok.NoArgsConstructor;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long
+    private Long idTransaction;
+
+    private double montant;
+    private Date date;
+
+    @ManyToOne
+    @JoinColumn(name = "idCompte")
+    private Compte compte;
 }

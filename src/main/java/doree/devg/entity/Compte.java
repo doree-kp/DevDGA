@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,4 +28,7 @@ public class Compte {
     @ManyToOne
     @JoinColumn(name = "idClient")
     private Client client;
+
+    @OneToMany(mappedBy = "compte")
+    private List<Transaction> transactions;
 }
