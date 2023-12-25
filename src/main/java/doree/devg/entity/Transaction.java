@@ -23,4 +23,10 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "idCompte")
     private Compte compte;
+
+    private String type;
+
+    @ManyToOne
+    @JoinColumn(name = "idCompteDest")
+    private Compte compteDest;
 }
