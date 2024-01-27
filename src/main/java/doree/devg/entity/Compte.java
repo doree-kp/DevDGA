@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
+import org.iban4j.IbanFormatException;
 
 import java.util.Date;
 import java.util.List;
@@ -31,4 +34,18 @@ public class Compte {
 
     @OneToMany(mappedBy = "compte")
     private List<Transaction> transactions;
+
+    public void genererIban() {
+        try {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.TG)
+                    .bankCode("1234")
+                    .branchCode("5678")
+                    .accountNumber(numeroCompte)
+                    .build();
+            numeroCompte = iban.toString();
+        }catch (IbanFormatException e){
+            e.printStackTrace();
+        }
+    }
 }

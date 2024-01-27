@@ -1,19 +1,17 @@
 package doree.devg.controller;
 
-import doree.devg.SoldeInsuffisantException;
+import doree.devg.extra.SoldeInsuffisantException;
 import doree.devg.entity.Compte;
 import doree.devg.entity.Transaction;
-import doree.devg.service.ClientServiceImpl;
 import doree.devg.service.CompteServiceImpl;
-import doree.devg.service.ICompteService;
 import doree.devg.service.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import doree.devg.extra.RelevePDFGenerator;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +106,35 @@ public class CompteController {
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/{id}/releve")
+    public ResponseEntity<byte[]> genererReleve(@PathVariable Long id,
+                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateDebut,
+                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateFin){
+        Compte compte = compteService.getCompteById(id);
+        if (compte != null){
+            List<Transaction> transactions = transactionService.getTransactionsByCompteAndDate(id, dateDebut, dateFin);
+            byte[] relevePDF = genererRelevePDF(compte, transactions);
+
+            return ResponseEntity.ok()
+                    .header("content-Disposition", "attachment; filename=releve.pdf")
+                    .body(relevePDF);
+
+        }else {
+            String message = "Aucun compte n'est trouvé avec l'ID : " + id;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    private byte[] genererRelevePDF(Compte compte, List<Transaction> transactions){
+        StringBuilder contenuReleve = new StringBuilder();
+        contenuReleve.append("Relevé de compte pour le compte : ").append(compte.getNumeroCompte()).append("\n\n");
+
+        for (Transaction transaction : transactions){
+            contenuReleve.append(transaction.getType()).append(" : ").append(transaction.getMontant()).append("\n");
+        }
+        return RelevePDFGenerator.genererRelevePDF(contenuReleve.toString());
     }
 
 }

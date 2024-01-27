@@ -23,6 +23,7 @@ public class CompteServiceImpl implements ICompteService{
 
     @Override
     public Compte saveCompte(Compte compte) {
+        compte.genererIban();
         return compteRepository.save(compte);
     }
 
@@ -32,7 +33,14 @@ public class CompteServiceImpl implements ICompteService{
     }
 
     @Override
-    public void updateSolde(Compte compte, double nouveauSolde) {
-
+    public void updateSolde(Long idCompte, double montant) {
+        Compte compte = compteRepository.findById(idCompte).orElse(null);
+        if (compte!= null){
+            double nouveauSolde = compte.getSolde() + montant;
+            compte.setSolde(nouveauSolde);
+            compteRepository.save(compte);
+        }else {
+            throw new IllegalArgumentException("Compte non trouvé avec l'ID : " + idCompte);
+        }
     }
 }

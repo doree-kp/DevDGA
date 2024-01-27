@@ -10,5 +10,5 @@ public interface ICompteService {
     Compte saveCompte(Compte compte);
     void deleteCompte(Long id);
 
-    void updateSolde(Compte compte, double nouveauSolde);
+    void updateSolde(Long IdCompte, double montant);
 }

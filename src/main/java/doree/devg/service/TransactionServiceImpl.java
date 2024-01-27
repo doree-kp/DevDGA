@@ -1,6 +1,6 @@
 package doree.devg.service;
 
-import doree.devg.SoldeInsuffisantException;
+import doree.devg.extra.SoldeInsuffisantException;
 import doree.devg.entity.Compte;
 import doree.devg.entity.Transaction;
 import doree.devg.repository.TransactionRepository;
@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
 @Service
-public class TransactionServiceImpl implements ITransactionService{
+public class TransactionServiceImpl implements ITransactionService {
+
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
     private CompteServiceImpl compteService;
+
     @Override
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
@@ -30,34 +33,36 @@ public class TransactionServiceImpl implements ITransactionService{
     public Transaction saveTransaction(Transaction transaction) {
         Compte compte = transaction.getCompte();
         Compte compteDest = transaction.getCompteDest();
-        double nouveauSolde = compte.getSolde();
+        double montant = transaction.getMontant();
 
-        if ("VERSEMENT".equals(transaction.getType())){
-            nouveauSolde += transaction.getMontant();
-        } else if ("RETRAIT".equals(transaction.getType())){
-            if (nouveauSolde >= transaction.getMontant()){
-                nouveauSolde -= transaction.getMontant();
-            }else {
-                throw new SoldeInsuffisantException("Solde insuffisant pour le retrait. ");
-            }
-        } else if ("VIREMENT".equals(transaction.getType())) {
-            if (nouveauSolde >= transaction.getMontant()){
-                nouveauSolde -= transaction.getMontant();
-                Compte compteDestinataire = transaction.getCompteDest();
-                double nouveauSoldeDest = compteDestinataire.getSolde() + transaction.getMontant();
-                compteService.updateSolde(compteDestinataire, nouveauSoldeDest);
-            }else {
-                throw new SoldeInsuffisantException("Solde insuffisant pour lr virement. ");
-            }
+        switch (transaction.getType()) {
+            case "VERSEMENT":
+                compteService.updateSolde(compte.getIdCompte(), +montant);
+                break;
+            case "RETRAIT":
+                double nouveauSoldeRetrait = compte.getSolde() - montant;
+                if (nouveauSoldeRetrait >= 0) {
+                    compteService.updateSolde(compte.getIdCompte(), -montant);
+                } else {
+                    throw new SoldeInsuffisantException("Solde insuffisant pour le retrait.");
+                }
+                break;
+            case "VIREMENT":
+                double nouveauSoldeVirement = compte.getSolde() - montant;
+                if (nouveauSoldeVirement >= 0) {
+                    compteService.updateSolde(compte.getIdCompte(), -montant);
 
+                    double nouveauSoldeDest = compteDest.getSolde() + montant;
+                    compteService.updateSolde(compteDest.getIdCompte(), nouveauSoldeDest);
+                } else {
+                    throw new SoldeInsuffisantException("Solde insuffisant pour le virement.");
+                }
+                break;
         }
-
-        compteService.updateSolde(compte, nouveauSolde);
 
         transaction.setDate(new Date());
         return transactionRepository.save(transaction);
     }
-
 
 
     @Override
