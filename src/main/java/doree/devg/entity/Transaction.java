@@ -21,12 +21,12 @@ public class Transaction {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "idCompte")
+    @JoinColumn(name = "numeroCompte")
     private Compte compte;
 
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "idCompteDest")
+    @JoinColumn(name = "numeroCompteDest")
     private Compte compteDest;
 }

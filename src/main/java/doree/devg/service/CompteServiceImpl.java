@@ -33,14 +33,14 @@ public class CompteServiceImpl implements ICompteService{
     }
 
     @Override
-    public void updateSolde(Long idCompte, double montant) {
-        Compte compte = compteRepository.findById(idCompte).orElse(null);
+    public void updateSolde(String numeroCompte, double montant) {
+        Compte compte = compteRepository.findCompteByNumeroCompte(numeroCompte);
         if (compte!= null){
             double nouveauSolde = compte.getSolde() + montant;
             compte.setSolde(nouveauSolde);
             compteRepository.save(compte);
         }else {
-            throw new IllegalArgumentException("Compte non trouvé avec l'ID : " + idCompte);
+            throw new IllegalArgumentException("Compte non trouvé avec le numéro de compte : " + numeroCompte);
         }
     }
 }

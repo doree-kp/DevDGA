@@ -34,4 +34,9 @@ public class ClientController {
     public void deleteClient(@PathVariable Long id){
         clientService.deleteClient(id);
     }
+
+    @GetMapping("/login")
+    public Client getClientByLoginInfo(@RequestParam String username, @RequestParam String password){
+        return clientService.getClientByLoginInfo(username, password);
+    }
 }

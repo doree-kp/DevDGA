@@ -37,12 +37,12 @@ public class TransactionServiceImpl implements ITransactionService {
 
         switch (transaction.getType()) {
             case "VERSEMENT":
-                compteService.updateSolde(compte.getIdCompte(), +montant);
+                compteService.updateSolde(compte.getNumeroCompte(), +montant);
                 break;
             case "RETRAIT":
                 double nouveauSoldeRetrait = compte.getSolde() - montant;
                 if (nouveauSoldeRetrait >= 0) {
-                    compteService.updateSolde(compte.getIdCompte(), -montant);
+                    compteService.updateSolde(compte.getNumeroCompte(), -montant);
                 } else {
                     throw new SoldeInsuffisantException("Solde insuffisant pour le retrait.");
                 }
@@ -50,10 +50,10 @@ public class TransactionServiceImpl implements ITransactionService {
             case "VIREMENT":
                 double nouveauSoldeVirement = compte.getSolde() - montant;
                 if (nouveauSoldeVirement >= 0) {
-                    compteService.updateSolde(compte.getIdCompte(), -montant);
+                    compteService.updateSolde(compte.getNumeroCompte(), -montant);
 
                     double nouveauSoldeDest = compteDest.getSolde() + montant;
-                    compteService.updateSolde(compteDest.getIdCompte(), nouveauSoldeDest);
+                    compteService.updateSolde(compteDest.getNumeroCompte(), nouveauSoldeDest);
                 } else {
                     throw new SoldeInsuffisantException("Solde insuffisant pour le virement.");
                 }

@@ -26,6 +26,8 @@ public class Client {
     private String numeroTelephone;
     private String courriel;
     private String nationalite;
+    private String username;
+    private String password;
 
     @OneToMany(mappedBy = "client")
     private List<Compte> comptes;

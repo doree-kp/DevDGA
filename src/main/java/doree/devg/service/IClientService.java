@@ -9,4 +9,5 @@ public interface IClientService {
     Client getClientById(Long id);
     Client saveClient(Client client);
     void deleteClient(Long id);
+    Client getClientByLoginInfo(String username, String password);
 }

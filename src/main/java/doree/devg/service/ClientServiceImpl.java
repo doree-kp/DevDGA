@@ -30,4 +30,9 @@ public class ClientServiceImpl implements IClientService{
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    @Override
+    public Client getClientByLoginInfo(String username, String password) {
+        return clientRepository.findByUsernameAndPassword(username, password);
+    }
 }
