@@ -10,5 +10,5 @@ public interface ITransactionService {
     Transaction getTransactionById(Long id);
     Transaction saveTransaction(Transaction transaction);
     void deleteTransaction(Long id);
-    List<Transaction> getTransactionsByCompteAndDate(Long idCompte, Date dateDebut, Date dateFin);
+    List<Transaction> getTransactionsByCompteAndDate(String numeroCompte, Date dateDebut, Date dateFin);
 }

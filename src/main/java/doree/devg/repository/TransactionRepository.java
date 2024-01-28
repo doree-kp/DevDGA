@@ -7,5 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    List<Transaction> findByCompte_IdCompteAndDateBetween(Long idCompte, Date dateDebut, Date dateFin);
+    List<Transaction> findByCompte_NumeroCompteAndDateBetween(String numeroCompte, Date dateDebut, Date dateFin);
+
 }

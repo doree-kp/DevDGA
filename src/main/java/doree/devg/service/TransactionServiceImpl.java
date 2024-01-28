@@ -71,7 +71,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public List<Transaction> getTransactionsByCompteAndDate(Long idCompte, Date dateDebut, Date dateFin) {
-        return transactionRepository.findByCompte_IdCompteAndDateBetween(idCompte, dateDebut, dateFin);
+    public List<Transaction> getTransactionsByCompteAndDate(String numeroCompte, Date dateDebut, Date dateFin) {
+        return transactionRepository.findByCompte_NumeroCompteAndDateBetween(numeroCompte, dateDebut, dateFin);
     }
 }
