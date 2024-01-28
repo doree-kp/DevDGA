@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
+
 
 @Entity
 @Data
@@ -20,7 +22,7 @@ public class Client {
 
     private String nom;
     private String prenom;
-    private Date dateNaissance;
+    private LocalDate dateNaissance;
     private String sexe;
     private String adresse;
     private String numeroTelephone;
