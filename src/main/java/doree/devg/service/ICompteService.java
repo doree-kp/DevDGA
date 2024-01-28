@@ -9,6 +9,7 @@ public interface ICompteService {
     Compte getCompteById(Long id);
     Compte saveCompte(Compte compte);
     void deleteCompte(Long id);
+    Compte getCompteByNumeroCompte(String numeroCompte);
 
     void updateSolde(String  numeroCompte, double montant);
 }

@@ -22,6 +22,11 @@ public class CompteServiceImpl implements ICompteService{
     }
 
     @Override
+    public Compte getCompteByNumeroCompte(String  numeroCompte) {
+        return compteRepository.findCompteByNumeroCompte(numeroCompte);
+    }
+
+    @Override
     public Compte saveCompte(Compte compte) {
         compte.genererIban();
         return compteRepository.save(compte);

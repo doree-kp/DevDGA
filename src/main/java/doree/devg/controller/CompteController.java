@@ -30,9 +30,9 @@ public class CompteController {
         return compteService.getAllComptes();
     }
 
-    @GetMapping("/{id}")
-    public Compte getCompteById(@PathVariable Long id){
-        return compteService.getCompteById(id);
+    @GetMapping("/{numeroCompte}")
+    public Compte getCompteByNumeroCompte(@PathVariable String  numeroCompte){
+        return compteService.getCompteByNumeroCompte(numeroCompte);
     }
 
     @PostMapping
@@ -45,9 +45,9 @@ public class CompteController {
         compteService.deleteCompte(id);
     }
 
-    @PostMapping("/{id}/versement")
-    public ResponseEntity<Transaction> faireVersement(@PathVariable Long id, @RequestBody Transaction transaction){
-        Compte compte = compteService.getCompteById(id);
+    @PostMapping("/{numeroCompte}/versement")
+    public ResponseEntity<Transaction> faireVersement(@PathVariable String  numeroCompte, @RequestBody Transaction transaction){
+        Compte compte = compteService.getCompteByNumeroCompte(numeroCompte);
         if (compte != null){
             transaction.setCompte(compte);
             Transaction nouvelleTransaction = transactionService.saveTransaction(transaction);
@@ -57,9 +57,9 @@ public class CompteController {
         }
     }
 
-    @PostMapping("/{id}/retrait")
-    public ResponseEntity<Transaction> faireRetrait(@PathVariable Long id, @RequestBody Transaction transaction){
-        Compte compte = compteService.getCompteById(id);
+    @PostMapping("/{numeroCompte}/retrait")
+    public ResponseEntity<Transaction> faireRetrait(@PathVariable String numeroCompte, @RequestBody Transaction transaction){
+        Compte compte = compteService.getCompteByNumeroCompte(numeroCompte);
         if (compte != null){
             transaction.setCompte(compte);
             transaction.setType("RETRAIT");
@@ -74,10 +74,10 @@ public class CompteController {
         }
     }
 
-    @PostMapping("/{id}/virement")
-    public ResponseEntity<Transaction> faireVirement(@PathVariable Long id, @RequestBody Transaction transaction){
-        Compte compte = compteService.getCompteById(id);
-        Compte compteDest = compteService.getCompteById(transaction.getCompteDest().getIdCompte());
+    @PostMapping("/{numeroCompte}/virement")
+    public ResponseEntity<Transaction> faireVirement(@PathVariable String numeroCompte, @RequestBody Transaction transaction){
+        Compte compte = compteService.getCompteByNumeroCompte(numeroCompte);
+        Compte compteDest = compteService.getCompteByNumeroCompte(transaction.getCompteDest().getNumeroCompte());
         if (compte != null && compteDest != null){
             transaction.setCompte(compte);
             transaction.setCompteDest(compteDest);
@@ -94,27 +94,27 @@ public class CompteController {
         }
     }
 
-    @GetMapping("/{id}/transactions")
+    @GetMapping("/{numeroCompte}/transactions")
     public ResponseEntity<List<Transaction>>getTransactionsByCompteAndDate(
-            @PathVariable Long id,
+            @PathVariable String  numeroCompte,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)Date dateDebut,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateFin){
-        Compte compte = compteService.getCompteById(id);
+        Compte compte = compteService.getCompteByNumeroCompte(numeroCompte);
         if (compte != null){
-            List<Transaction> transactions = transactionService.getTransactionsByCompteAndDate(id, dateDebut, dateFin);
+            List<Transaction> transactions = transactionService.getTransactionsByCompteAndDate(numeroCompte, dateDebut, dateFin);
             return ResponseEntity.ok(transactions);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @GetMapping("/{id}/releve")
-    public ResponseEntity<byte[]> genererReleve(@PathVariable Long id,
+    @GetMapping("/{numeroCompte}/releve")
+    public ResponseEntity<byte[]> genererReleve(@PathVariable String numeroCompte,
                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateDebut,
                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateFin){
-        Compte compte = compteService.getCompteById(id);
+        Compte compte = compteService.getCompteByNumeroCompte(numeroCompte);
         if (compte != null){
-            List<Transaction> transactions = transactionService.getTransactionsByCompteAndDate(id, dateDebut, dateFin);
+            List<Transaction> transactions = transactionService.getTransactionsByCompteAndDate(numeroCompte, dateDebut, dateFin);
             byte[] relevePDF = genererRelevePDF(compte, transactions);
 
             return ResponseEntity.ok()
@@ -122,7 +122,7 @@ public class CompteController {
                     .body(relevePDF);
 
         }else {
-            String message = "Aucun compte n'est trouvé avec l'ID : " + id;
+            String message = "Aucun compte n'est trouvé avec le numero du compte : " + numeroCompte;
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
