@@ -1,5 +1,6 @@
 package doree.devg.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import doree.devg.repository.CompteRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,17 +35,14 @@ public class Compte {
 
     @ManyToOne
     @JoinColumn(name = "id_client")
+    @JsonIgnore
     private Client client;
 
+    @OneToMany(mappedBy = "source")
+    private List<Transfert> transferts;
+
     @OneToMany(mappedBy = "compte")
-    private List<Transaction> transactions;
-
-
-    public void genererIban() {
-
-            this.numeroCompte = Iban.random(CountryCode.FR).toString();
-
-    }
+    private List<Operation> operations;
 
 
 }

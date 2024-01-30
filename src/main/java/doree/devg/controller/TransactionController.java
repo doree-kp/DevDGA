@@ -1,34 +1,42 @@
 package doree.devg.controller;
 
-import doree.devg.entity.Transaction;
-import doree.devg.service.TransactionServiceImpl;
+import doree.devg.repository.CompteRepository;
+import doree.devg.service.CompteServiceImpl;
+import doree.devg.service.TransactionService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/transactions")
+
 public class TransactionController {
+
     @Autowired
-    private TransactionServiceImpl transactionService;
+    private CompteServiceImpl compteService;
 
-    @GetMapping
-    public List<Transaction> getAllTransactions(){
-        return transactionService.getAllTransactions();
+    @Autowired
+    private TransactionService transactionService;
+    @PostMapping("/depot")
+    public ResponseEntity<String> makeDeposit(@RequestParam String numeroCompte, @RequestParam float montant){
+        compteService.makeDeposit(numeroCompte, montant);
+        return ResponseEntity.ok("Dépôt effectué avec succès.");
     }
-    @GetMapping("/{id}")
-    public Transaction getTransactionById(@PathVariable Long id){
-        return transactionService.getTransactionById(id);
+    @PostMapping("/retrait")
+    public ResponseEntity<String> makeWithdrawal(@RequestParam String numeroCompte, @RequestParam float montant){
+        compteService.makeWithdrawal(numeroCompte, montant);
+        return ResponseEntity.ok("Retrait effectué avec succès.");
     }
 
-    @PostMapping
-    public Transaction saveTransaction(@RequestBody Transaction transaction){
-        return transactionService.saveTransaction(transaction);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteTransaction(@PathVariable Long id){
-        transactionService.deleteTransaction(id);
+    @PostMapping("/transfert")
+    public ResponseEntity<String > makeTransfert(
+            @RequestParam String sourceNumeroCompte,
+            @RequestParam String destinationNumeroCompte,
+            @RequestParam float montant
+    ){
+        transactionService.makeTransfert(sourceNumeroCompte, destinationNumeroCompte, montant);
+        return ResponseEntity.ok("Virement effectué avec succès.");
     }
 }

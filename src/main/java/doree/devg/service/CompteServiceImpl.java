@@ -1,10 +1,14 @@
 package doree.devg.service;
 
 import doree.devg.entity.Compte;
+import doree.devg.entity.Operation;
+import doree.devg.entity.TypeOperation;
 import doree.devg.repository.CompteRepository;
+import doree.devg.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +17,10 @@ public class CompteServiceImpl implements ICompteService{
 
     @Autowired
     private CompteRepository compteRepository;
+
+    @Autowired
+    private OperationRepository operationRepository;
+
     @Override
     public List<Compte> getAllComptes() {
         return compteRepository.findAll();
@@ -30,7 +38,6 @@ public class CompteServiceImpl implements ICompteService{
 
     @Override
     public Compte saveCompte(Compte compte) {
-        compte.genererIban();
         return compteRepository.save(compte);
     }
 
@@ -49,6 +56,36 @@ public class CompteServiceImpl implements ICompteService{
         }else {
             throw new IllegalArgumentException("Compte non trouvé avec le numéro de compte : " + numeroCompte);
         }
+    }
+
+    public void makeWithdrawal(String numeroCompte, float montant){
+        Compte compte = compteRepository.findCompteByNumeroCompte((numeroCompte));
+        if (compte != null && compte.getSolde() >= montant){
+            compte.setSolde(compte.getSolde() - montant);
+            Operation operation = new Operation();
+            operation.setCompte(compte);
+            operation.setMakedAt(LocalDateTime.now());
+            operation.setTypeOperation(TypeOperation.RETRAIT);
+            operation.setMontant(montant);
+            operationRepository.save(operation);
+            compteRepository.save(compte);
+        }
+    }
+
+    public boolean makeDeposit(String numeroCompte, float montant){
+        Compte compte = compteRepository.findCompteByNumeroCompte(numeroCompte);
+        if (compte != null){
+            compte.setSolde(compte.getSolde() + montant);
+            Operation operation = new Operation();
+            operation.setCompte(compte);
+            operation.setMakedAt(LocalDateTime.now());
+            operation.setTypeOperation(TypeOperation.DEPOT);
+            operation.setMontant(montant);
+            operationRepository.save(operation);
+            compteRepository.save(compte);
+            return true;
+        }
+        return false;
     }
 
 }
