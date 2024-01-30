@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class CompteServiceImpl implements ICompteService{
 
@@ -48,4 +50,5 @@ public class CompteServiceImpl implements ICompteService{
             throw new IllegalArgumentException("Compte non trouvé avec le numéro de compte : " + numeroCompte);
         }
     }
+
 }

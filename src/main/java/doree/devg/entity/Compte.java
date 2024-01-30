@@ -1,5 +1,6 @@
 package doree.devg.entity;
 
+import doree.devg.repository.CompteRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.iban4j.IbanFormatException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -35,17 +37,22 @@ public class Compte {
     @OneToMany(mappedBy = "compte")
     private List<Transaction> transactions;
 
+
     public void genererIban() {
         try {
+            // Utilisez le code du pays TG (Togo) pour le pays, et une banque fictive
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.TG)
                     .bankCode("1234")
                     .branchCode("5678")
-                    .accountNumber(numeroCompte)
+                    .accountNumber(UUID.randomUUID().toString()) // Générez une partie aléatoire
                     .build();
             this.numeroCompte = iban.toString();
         } catch (IbanFormatException e) {
             e.printStackTrace();
+            // Gérer l'exception si nécessaire
         }
     }
+
+
 }
