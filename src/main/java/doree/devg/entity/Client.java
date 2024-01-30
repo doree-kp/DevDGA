@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -33,4 +34,9 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<Compte> comptes;
+
+    public void setPassword(String password){
+        BCryptPasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
 }
