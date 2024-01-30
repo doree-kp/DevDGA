@@ -7,6 +7,7 @@ import doree.devg.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 break;
         }
 
-        transaction.setDate(new Date());
+        transaction.setDate(LocalDate.now());
         return transactionRepository.save(transaction);
     }
 

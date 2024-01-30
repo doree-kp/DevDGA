@@ -1,16 +1,24 @@
 package doree.devg.controller;
 
+import doree.devg.dto.CompteDto;
+import doree.devg.entity.Client;
+import doree.devg.entity.TypeCompte;
 import doree.devg.extra.SoldeInsuffisantException;
 import doree.devg.entity.Compte;
 import doree.devg.entity.Transaction;
+import doree.devg.repository.ClientRepository;
 import doree.devg.service.CompteServiceImpl;
 import doree.devg.service.TransactionServiceImpl;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import doree.devg.extra.RelevePDFGenerator;
+import java.time.LocalDate;
+
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +33,9 @@ public class CompteController {
     @Autowired
     private TransactionServiceImpl transactionService;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     @GetMapping
     public List<Compte> getAllComptes(){
         return compteService.getAllComptes();
@@ -36,7 +47,9 @@ public class CompteController {
     }
 
     @PostMapping
-    public Compte saveCompte(@RequestBody Compte compte){
+    public Compte saveCompte(@RequestBody CompteDto compteDto){
+        var client = clientRepository.findById(compteDto.getIdClient()).get();
+        Compte compte = Compte.builder().typeCompte(compteDto.getType()).solde(0.0).dateCreation(LocalDate.now()).numeroCompte(Iban.random(CountryCode.FR).toString()).client(client).build();
         return compteService.saveCompte(compte);
     }
 

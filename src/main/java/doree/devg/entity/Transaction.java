@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ public class Transaction {
     private Long idTransaction;
 
     private double montant;
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "numeroCompte")

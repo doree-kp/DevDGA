@@ -32,7 +32,7 @@ public class Client {
     private String username;
     private String password;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL)
     private List<Compte> comptes;
 
     public void setPassword(String password){
