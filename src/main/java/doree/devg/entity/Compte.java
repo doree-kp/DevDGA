@@ -39,19 +39,9 @@ public class Compte {
 
 
     public void genererIban() {
-        try {
-            // Utilisez le code du pays TG (Togo) pour le pays, et une banque fictive
-            Iban iban = new Iban.Builder()
-                    .countryCode(CountryCode.TG)
-                    .bankCode("1234")
-                    .branchCode("5678")
-                    .accountNumber(UUID.randomUUID().toString()) // Générez une partie aléatoire
-                    .build();
-            this.numeroCompte = iban.toString();
-        } catch (IbanFormatException e) {
-            e.printStackTrace();
-            // Gérer l'exception si nécessaire
-        }
+
+            this.numeroCompte = Iban.random(CountryCode.FR).toString();
+
     }
 
 
