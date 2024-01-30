@@ -43,8 +43,8 @@ public class Compte {
                     .branchCode("5678")
                     .accountNumber(numeroCompte)
                     .build();
-            numeroCompte = iban.toString();
-        }catch (IbanFormatException e){
+            this.numeroCompte = iban.toString();
+        } catch (IbanFormatException e) {
             e.printStackTrace();
         }
     }
