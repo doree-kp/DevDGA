@@ -12,4 +12,5 @@ public interface ICompteService {
     Compte getCompteByNumeroCompte(String numeroCompte);
 
     void updateSolde(String  numeroCompte, double montant);
+
 }

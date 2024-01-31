@@ -8,7 +8,10 @@ import doree.devg.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -87,5 +90,10 @@ public class CompteServiceImpl implements ICompteService{
         }
         return false;
     }
+
+    public List<Operation> getTransactions(Long idCompte, LocalDate dateDebut, LocalDate dateFin) {
+        return operationRepository.findByCompteIdAndMadeAtBetween(idCompte, dateDebut, dateFin, Arrays.asList(TypeOperation.DEPOT, TypeOperation.RETRAIT));
+    }
+
 
 }
