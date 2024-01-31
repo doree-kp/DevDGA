@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {
-
+    List<Operation> findAllByCompte_IdCompte(Long id);
 }

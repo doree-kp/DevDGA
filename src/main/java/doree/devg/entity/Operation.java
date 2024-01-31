@@ -27,6 +27,4 @@ public class Operation {
     private float montant;
     private  TypeOperation typeOperation;
     private LocalDateTime makedAt;
-
-
 }

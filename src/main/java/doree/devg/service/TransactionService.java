@@ -76,6 +76,13 @@ public class TransactionService {
 
    }
 
+    public List<Operation> getAllOperations(Long id){
+        return operationRepository.findAllByCompte_IdCompte(id);
+    }
+    public List<Transfert> getAllTransferts(Long id){
+        return transfertRepository.findTransfertsBySource_IdCompte(id);
+    }
+
 
 
 }

@@ -31,5 +31,4 @@ public class Transfert {
     private float montant;
     private LocalDate makedAt;
     private String destNumber;
-
 }
