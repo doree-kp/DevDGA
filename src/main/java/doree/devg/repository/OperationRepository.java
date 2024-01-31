@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
-    <T> List<Operation> findByCompteIdAndMadeAtBetween(Long idCompte, LocalDate dateDebut, LocalDate dateFin, List<T> list);
 }

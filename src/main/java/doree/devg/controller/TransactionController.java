@@ -19,18 +19,18 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
-    @PostMapping("/depot")
+    @GetMapping("/depot")
     public ResponseEntity<String> makeDeposit(@RequestParam String numeroCompte, @RequestParam float montant){
         compteService.makeDeposit(numeroCompte, montant);
         return ResponseEntity.ok("Dépôt effectué avec succès.");
     }
-    @PostMapping("/retrait")
+    @GetMapping("/retrait")
     public ResponseEntity<String> makeWithdrawal(@RequestParam String numeroCompte, @RequestParam float montant){
         compteService.makeWithdrawal(numeroCompte, montant);
         return ResponseEntity.ok("Retrait effectué avec succès.");
     }
 
-    @PostMapping("/transfert")
+    @GetMapping("/transfert")
     public ResponseEntity<String > makeTransfert(
             @RequestParam String sourceNumeroCompte,
             @RequestParam String destinationNumeroCompte,

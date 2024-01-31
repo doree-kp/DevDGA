@@ -91,9 +91,9 @@ public class CompteServiceImpl implements ICompteService{
         return false;
     }
 
-    public List<Operation> getTransactions(Long idCompte, LocalDate dateDebut, LocalDate dateFin) {
-        return operationRepository.findByCompteIdAndMadeAtBetween(idCompte, dateDebut, dateFin, Arrays.asList(TypeOperation.DEPOT, TypeOperation.RETRAIT));
-    }
+//    public List<Operation> getTransactions(Long idCompte, LocalDate dateDebut, LocalDate dateFin) {
+//        return compteRepository.findByCompteIdAndMadeAtBetween(idCompte, dateDebut, dateFin, Arrays.asList(TypeOperation.DEPOT, TypeOperation.RETRAIT));
+//    }
 
 
 }

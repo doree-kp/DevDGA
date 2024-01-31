@@ -1,7 +1,6 @@
 package doree.devg.controller;
 
 import doree.devg.dto.CompteDto;
-import doree.devg.entity.Operation;
 import doree.devg.extra.SoldeInsuffisantException;
 import doree.devg.entity.Compte;
 import doree.devg.repository.ClientRepository;
@@ -57,11 +56,21 @@ public class CompteController {
         compteService.deleteCompte(id);
     }
 
-    @GetMapping("/{idCompte}/transactions")
-    public List<Operation> getTransactions(@PathVariable Long idCompte,
-                                           @RequestParam("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateDebut,
-                                           @RequestParam("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateFin) {
-        return compteService.getTransactions(idCompte, dateDebut, dateFin);
-    }
+//    @GetMapping("/{idCompte}/transactions")
+//    public List<Operation> getTransactions(@PathVariable Long idCompte,
+//                                           @RequestParam("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateDebut,
+//                                           @RequestParam("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateFin) {
+//        return transactionService.getTransactions(idCompte, dateDebut, dateFin);
+//    }
+
+
+
+
+
+
+
+
+
+
 
 }
